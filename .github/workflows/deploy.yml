@@ -1,4 +1,4 @@
-name: Deploy Noejs app to docker hub then remote server
+name: Deploy Nodejs app to docker hub then remote server
 
 on:
   push:
@@ -24,3 +24,17 @@ jobs:
         with:
           push: true
           tags: ${{ vars.DOCKER_USERNAME }}/node-secret-service:latest
+
+      - name: Execute remote SSH commands using password
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ vars.HOST }}
+          username: ${{ vars.REMOTE_USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          script: |
+            docker pull ${{ vars.DOCKER_USERNAME }}/node-secret-service:latest
+            docker stop node-secret-service || true
+            docker rm node-secret-service || true
+            docker run -d --name node-secret-service -p 80:3000 \
+              --env-file /home/${{ vars.REMOTE_USERNAME }}/.env \
+              ${{ vars.DOCKER_USERNAME }}/node-secret-service:latest
