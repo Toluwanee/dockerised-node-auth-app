@@ -32,6 +32,9 @@ jobs:
           username: ${{ vars.REMOTE_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
+            echo "USERNAME=admin" >> /home/${{ vars.REMOTE_USERNAME }}/.env
+            echo "PASSWORD=pass1234" >> /home/${{ vars.REMOTE_USERNAME }}/.env
+            echo "SECRET_MESSAGE=This is top secret!" >> /home/${{ vars.REMOTE_USERNAME }}/.env
             docker pull ${{ vars.DOCKER_USERNAME }}/node-secret-service:latest
             docker stop node-secret-service || true
             docker rm node-secret-service || true
