@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/env-check', (req, res) => {
-  res.send(`Your secret message is: ${process.env.SECRET_MESSAGE}`);
+  res.send(`Your secret message on firt test with github acttion is: ${process.env.SECRET_MESSAGE}`);
 });
 
 app.get('/secret', (req, res) => {
